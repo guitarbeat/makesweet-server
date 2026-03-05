@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: makesweet-server
+    runtime: docker
+    plan: free
+    envVars:
+      - key: SAVE_IMAGE_FOLDER
+        value: /makesweet/images
+      - key: GIN_MODE
+        value: release
