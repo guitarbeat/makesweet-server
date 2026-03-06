@@ -47,7 +47,7 @@ func (c *commandBuilder) ChristmasHeartLocket(leftImagePath string, rightImagePa
 
 func (c *commandBuilder) Circuit(imagePath string, outputPath string) *exec.Cmd {
 	images := []string{imagePath}
-	cmd := c.reanimateUsingTemplate("/makesweet/templates/circuit.zip", images, outputPath)
+	cmd := c.reanimateUsingTemplate("/makesweet/templates/circuit-board.zip", images, outputPath)
 	return cmd
 }
 
