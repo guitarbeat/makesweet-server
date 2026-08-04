@@ -62,6 +62,7 @@ If the message contains multiple images, those take priority over avatars. The b
     "scopes": {
       "bot": [
         "reactions:read",
+        "reactions:write",
         "channels:history",
         "groups:history",
         "im:history",
