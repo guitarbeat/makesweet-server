@@ -13,24 +13,21 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-//	@Title			Makesweet golang server
-//	@Version		1.0
-//	@Description	A golang server to create gifs from images.
-//	@Accept			mpfd
-//	@Produce		json image/gif
-//	@Host			localhost:8080
-//	@BasePath		/api
+// @Title			Makesweet golang server
+// @Version		1.0
+// @Description	A golang server to create gifs from images.
+// @Accept			mpfd
+// @Produce		json image/gif
+// @Host			localhost:8080
+// @BasePath		/api
 func main() {
-	imageFolderPath := os.Getenv("SAVE_IMAGE_FOLDER")
-	if len(strings.TrimSpace(imageFolderPath)) == 0 {
-		log.Fatal("SAVE_IMAGE_FOLDER environment variable invalid or not set")
-	}
-	_, err := os.Stat(imageFolderPath)
-	if err != nil {
-		log.Info("Creating folder to save input and output images")
-		err = os.MkdirAll(imageFolderPath, os.ModeAppend)
-		if err != nil {
-			log.Fatal("Failed to create image directory")
+	for _, envName := range []string{"SAVE_IMAGE_FOLDER", "SAVE_TEMPLATE_FOLDER"} {
+		folderPath := os.Getenv(envName)
+		if len(strings.TrimSpace(folderPath)) == 0 {
+			log.Fatalf("%s environment variable invalid or not set", envName)
+		}
+		if err := os.MkdirAll(folderPath, 0o755); err != nil {
+			log.Fatalf("Failed to create directory configured by %s: %v", envName, err)
 		}
 	}
 
