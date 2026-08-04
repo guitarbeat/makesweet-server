@@ -2,6 +2,8 @@
 
 A Slack bot that generates animated GIFs when you react to images with emojis. Powered by [MakeSweet](https://makesweet.com/) and real-time Socket Mode.
 
+This component now lives in the [`guitarbeat/makesweet-server`](https://github.com/guitarbeat/makesweet-server) monorepo. Run it together with the API from the repository root using `docker compose up`.
+
 ## How It Works
 
 1. Someone posts an image in Slack
@@ -76,6 +78,8 @@ If the message contains multiple images, those take priority over avatars. The b
       "bot_events": [
         "message.channels",
         "message.groups",
+        "message.im",
+        "message.mpim",
         "reaction_added"
       ]
     },
@@ -95,24 +99,34 @@ If the message contains multiple images, those take priority over avatars. The b
 | **Bot Token** (`xoxb-...`) | OAuth & Permissions → Bot User OAuth Token |
 | **App Token** (`xapp-...`) | Basic Information → App-Level Tokens → Generate (add `connections:write` scope) |
 
-### 3. Deploy
+### 3. Run
 
-#### Render (recommended)
+#### Docker Compose (recommended)
 
-Set these environment variables on a new Web Service:
+From the repository root, copy `.env.example` to `.env`, set `SLACK_BOT_TOKEN` and `SLACK_APP_TOKEN`, then run:
+
+```bash
+docker compose up
+```
+
+Compose provides `MAKESWEET_URL=http://makesweet-server:8080` automatically.
+
+#### Render
+
+The root `render.yaml` defines both services. Set these environment variables on the bot service:
 
 | Variable | Value |
 |----------|-------|
 | `SLACK_BOT_TOKEN` | Your `xoxb-...` token |
 | `SLACK_APP_TOKEN` | Your `xapp-...` token |
-| `MAKESWEET_URL` | URL of your MakeSweet server (e.g. `https://makesweet-server.onrender.com`) |
+| `MAKESWEET_URL` | Public URL of the MakeSweet server (e.g. `https://makesweet-server.onrender.com`) |
 
 #### Locally
 
 ```bash
 export SLACK_BOT_TOKEN=xoxb-your-token
 export SLACK_APP_TOKEN=xapp-your-token
-export MAKESWEET_URL=https://makesweet-server.onrender.com
+export MAKESWEET_URL=http://localhost:8080
 pip install -r requirements.txt
 python bot.py
 ```
@@ -120,7 +134,7 @@ python bot.py
 ## Requirements
 
 - Python 3.11+
-- A running [makesweet-server](https://github.com/guitarbeat/makesweet-server) instance
+- A running MakeSweet API from the repository root
 
 ## Architecture
 

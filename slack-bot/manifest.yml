@@ -17,10 +17,15 @@ oauth_config:
       - files:read
       - files:write
       - chat:write
+      - users:read
 settings:
   event_subscriptions:
     bot_events:
       - reaction_added
+      - message.channels
+      - message.groups
+      - message.im
+      - message.mpim
   org_deploy_enabled: false
   socket_mode_enabled: true
   token_rotation_enabled: false

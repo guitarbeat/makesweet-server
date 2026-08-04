@@ -1,11 +1,27 @@
 services:
-  makesweet:
-    container_name: makesweet
-    build: ./
-    env_file:
-      - .env
+  makesweet-server:
+    build:
+      context: .
+    environment:
+      SAVE_IMAGE_FOLDER: /makesweet/images
+      SAVE_TEMPLATE_FOLDER: /makesweet/temp/templates
+      GIN_MODE: ${GIN_MODE:-debug}
     ports:
-      - 8080:8080
+      - "8080:8080"
     tmpfs:
-      - ${SAVE_IMAGE_FOLDER}
-      - ${SAVE_TEMPLATE_FOLDER}
+      - /makesweet/images
+      - /makesweet/temp/templates
+
+  slack-bot:
+    build:
+      context: ./slack-bot
+    depends_on:
+      - makesweet-server
+    environment:
+      SLACK_BOT_TOKEN: ${SLACK_BOT_TOKEN:-}
+      SLACK_APP_TOKEN: ${SLACK_APP_TOKEN:-}
+      MAKESWEET_URL: http://makesweet-server:8080
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    restart: unless-stopped

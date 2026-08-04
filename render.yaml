@@ -3,8 +3,27 @@ services:
     name: makesweet-server
     runtime: docker
     plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     envVars:
       - key: SAVE_IMAGE_FOLDER
         value: /makesweet/images
+      - key: SAVE_TEMPLATE_FOLDER
+        value: /makesweet/temp/templates
       - key: GIN_MODE
         value: release
+
+  - type: web
+    name: makesweet-slack-bot
+    runtime: docker
+    plan: free
+    dockerfilePath: ./slack-bot/Dockerfile
+    dockerContext: ./slack-bot
+    healthCheckPath: /health
+    envVars:
+      - key: SLACK_BOT_TOKEN
+        sync: false
+      - key: SLACK_APP_TOKEN
+        sync: false
+      - key: MAKESWEET_URL
+        sync: false
